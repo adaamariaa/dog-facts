@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
-function LoginForm({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+interface LoginFormProps {
+  onLogin: () => void;
+}
 
-  const handleLogin = async (e) => {
+function LoginForm({ onLogin }: LoginFormProps) {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       alert("Login successful. User email: " + user.email);
-      onLogin(); 
+      onLogin();
     } catch (error) {
-      alert("Login wasn't successful, please try again and check your email and password.")
+      alert("Login wasn't successful, please try again and check your email and password.");
     }
   };
-
 
   return (
     <div>
